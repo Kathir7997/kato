@@ -13,6 +13,8 @@ const Navbar = ({ onToggleSidebar }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileSettings, setShowProfileSettings] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -42,6 +44,44 @@ const Navbar = ({ onToggleSidebar }) => {
     const minutes = Math.floor(diff / (1000 * 60));
     return `${minutes}m`;
   };
+
+  const getSearchResults = () => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase();
+    const results = [];
+
+    if ('settings'.includes(query) || 'profile'.includes(query)) {
+      results.push({ id: 'settings', type: 'action', title: 'Profile Settings', icon: 'settings', onClick: () => setShowProfileSettings(true) });
+    }
+
+    if ('analytics'.includes(query) || 'dashboard'.includes(query)) {
+      results.push({ id: 'dashboard', type: 'link', title: 'Analytics Dashboard', icon: 'chart', path: '/dashboard' });
+    }
+
+    if (urlsData) {
+      const urlMatches = urlsData.filter(url => 
+        (url.shortCode && url.shortCode.toLowerCase().includes(query)) ||
+        (url.originalUrl && url.originalUrl.toLowerCase().includes(query)) ||
+        (url.title && url.title.toLowerCase().includes(query))
+      ).slice(0, 5);
+
+      urlMatches.forEach(url => {
+        results.push({ 
+          id: url._id,
+          type: 'url', 
+          title: `/${url.shortCode}`, 
+          subtitle: url.originalUrl, 
+          icon: 'link', 
+          path: `/analytics/${url._id}`
+        });
+      });
+    }
+
+    return results;
+  };
+
+  const searchResults = getSearchResults();
 
   return (
     <header
@@ -96,7 +136,7 @@ const Navbar = ({ onToggleSidebar }) => {
       </div>
 
       {/* Middle Section: Search Bar */}
-      <div className="hidden lg:flex items-center relative max-w-md w-full mx-8">
+      <div className="hidden lg:flex items-center relative max-w-md w-full mx-8 z-50">
         <svg className="w-4 h-4 absolute left-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
@@ -109,7 +149,77 @@ const Navbar = ({ onToggleSidebar }) => {
             color: '#0f172a',
             border: '1px solid #e2e8f0',
           }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
         />
+
+        <AnimatePresence>
+          {isSearchFocused && searchQuery.trim() && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full mt-2 left-0 w-full rounded-xl p-2 z-50"
+              style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+              }}
+            >
+              {searchResults.length > 0 ? (
+                <div className="space-y-1">
+                  {searchResults.map((result) => (
+                    <div
+                      key={result.id}
+                      onClick={() => {
+                        if (result.onClick) {
+                          result.onClick();
+                        } else if (result.path) {
+                          navigate(result.path);
+                        }
+                        setSearchQuery('');
+                        setIsSearchFocused(false);
+                      }}
+                      className="p-2 hover:bg-slate-50 rounded-lg transition-colors flex items-start gap-2.5 cursor-pointer text-left"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        {result.icon === 'settings' && (
+                          <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        )}
+                        {result.icon === 'chart' && (
+                          <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                          </svg>
+                        )}
+                        {result.icon === 'link' && (
+                          <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-slate-800 truncate">{result.title}</p>
+                        {result.subtitle && (
+                          <p className="text-[10px] text-slate-400 truncate mt-0.5">{result.subtitle}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-6 text-center text-slate-400 text-xs font-medium">
+                  No results found for "{searchQuery}"
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Right Section: Status + Actions + User */}
