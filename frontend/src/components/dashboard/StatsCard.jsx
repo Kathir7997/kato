@@ -4,17 +4,17 @@ import { motion } from 'framer-motion';
 const StatsCard = ({ title, value, subText, icon, color, change, index = 0 }) => {
   const configs = {
     indigo: {
-      iconBg: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-      iconShadow: '0 8px 20px rgba(99,102,241,0.2)',
+      iconBg: 'linear-gradient(135deg, rgb(var(--rgb-primary)) 0%, rgb(var(--rgb-secondary)) 100%)',
+      iconShadow: '0 8px 20px rgba(var(--rgb-primary),0.2)',
       borderColor: '#e2e8f0',
-      accentColor: '#6366f1',
+      accentColor: 'rgb(var(--rgb-primary))',
       chartHeights: [0.3, 0.5, 0.8, 0.4, 0.9, 0.6, 0.7],
     },
     purple: {
-      iconBg: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-      iconShadow: '0 8px 20px rgba(168,85,247,0.2)',
+      iconBg: 'linear-gradient(135deg, rgb(var(--rgb-secondary)) 0%, rgb(var(--rgb-secondary)) 100%)',
+      iconShadow: '0 8px 20px rgba(var(--rgb-secondary),0.2)',
       borderColor: '#e2e8f0',
-      accentColor: '#a855f7',
+      accentColor: 'rgb(var(--rgb-secondary))',
       chartHeights: [0.4, 0.7, 0.5, 0.9, 0.3, 0.8, 0.6],
     },
     emerald: {

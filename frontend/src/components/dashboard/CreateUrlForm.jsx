@@ -58,7 +58,7 @@ const CreateUrlForm = () => {
       {/* Animated gradient background on hover */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
-          background: 'linear-gradient(135deg, rgba(99,102,241,0.01) 0%, rgba(139,92,246,0.01) 100%)',
+          background: 'linear-gradient(135deg, rgba(var(--rgb-primary),0.01) 0%, rgba(var(--rgb-secondary),0.01) 100%)',
         }}
       />
 
@@ -71,7 +71,7 @@ const CreateUrlForm = () => {
         <div className="flex items-start justify-between relative z-10">
           <div className="flex-1">
             <motion.h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <svg className="w-5 h-5" style={{ color: '#6366f1' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-5 h-5" style={{ color: 'rgb(var(--rgb-primary))' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
               </svg>
               Create a Short URL
@@ -83,8 +83,8 @@ const CreateUrlForm = () => {
           <motion.div
             className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ml-4"
             style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
-              boxShadow: '0 4px 12px rgba(99,102,241,0.2)',
+              background: 'linear-gradient(135deg, rgb(var(--rgb-primary)) 0%, rgb(var(--rgb-secondary)) 50%, rgb(var(--rgb-secondary)) 100%)',
+              boxShadow: '0 4px 12px rgba(var(--rgb-primary),0.2)',
             }}
             whileHover={{ scale: 1.1, rotate: 5 }}
           >
@@ -106,7 +106,7 @@ const CreateUrlForm = () => {
             <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
               <svg
                 className="w-5 h-5 transition-colors duration-200"
-                style={{ color: focused === 'url' ? '#6366f1' : '#64748b' }}
+                style={{ color: focused === 'url' ? 'rgb(var(--rgb-primary))' : '#64748b' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -137,9 +137,9 @@ const CreateUrlForm = () => {
           type="button"
           onClick={() => setExpanded((p) => !p)}
           className="flex items-center gap-3 text-sm font-semibold transition-all duration-200 group mt-2"
-          style={{ color: expanded ? '#4f46e5' : '#6366f1' }}
-          onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
-          onMouseLeave={e => e.currentTarget.style.color = expanded ? '#4f46e5' : '#6366f1'}
+          style={{ color: expanded ? 'rgb(var(--rgb-primary-600))' : 'rgb(var(--rgb-primary))' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'rgb(var(--rgb-primary-600))'}
+          onMouseLeave={e => e.currentTarget.style.color = expanded ? 'rgb(var(--rgb-primary-600))' : 'rgb(var(--rgb-primary))'}
           whileHover={{ x: 2 }}
           whileTap={{ x: 0 }}
         >
@@ -175,8 +175,8 @@ const CreateUrlForm = () => {
                   </label>
                   <div className="relative flex items-center w-full input-dark overflow-hidden"
                     style={{
-                      border: focused === 'alias' ? '1.5px solid rgba(99,102,241,0.8)' : '1.5px solid rgba(99,102,241,0.15)',
-                      boxShadow: focused === 'alias' ? '0 0 0 4px rgba(99,102,241,0.15), 0 8px 20px rgba(99,102,241,0.2)' : 'none',
+                      border: focused === 'alias' ? '1.5px solid rgba(var(--rgb-primary),0.8)' : '1.5px solid rgba(var(--rgb-primary),0.15)',
+                      boxShadow: focused === 'alias' ? '0 0 0 4px rgba(var(--rgb-primary),0.15), 0 8px 20px rgba(var(--rgb-primary),0.2)' : 'none',
                       background: '#ffffff',
                     }}
                   >
@@ -204,7 +204,7 @@ const CreateUrlForm = () => {
                     Expiry Date (Optional)
                   </label>
                   <div className="relative">
-                    <svg className="absolute inset-y-0 left-5 w-5 h-5 flex items-center pointer-events-none" style={{ color: focused === 'expiry' ? '#6366f1' : '#64748b' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <svg className="absolute inset-y-0 left-5 w-5 h-5 flex items-center pointer-events-none" style={{ color: focused === 'expiry' ? 'rgb(var(--rgb-primary))' : '#64748b' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     <input
@@ -236,9 +236,9 @@ const CreateUrlForm = () => {
           className="w-full py-4 rounded-xl font-bold text-base text-white flex items-center justify-center gap-3 transition-all duration-300 relative mt-8"
           style={{
             background: mutation.isPending || !form.originalUrl.trim()
-              ? 'linear-gradient(135deg, rgba(99,102,241,0.3) 0%, rgba(139,92,246,0.2) 100%)'
-              : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
-            boxShadow: mutation.isPending || !form.originalUrl.trim() ? 'none' : '0 4px 15px rgba(99,102,241,0.3)',
+              ? 'linear-gradient(135deg, rgba(var(--rgb-primary),0.3) 0%, rgba(var(--rgb-secondary),0.2) 100%)'
+              : 'linear-gradient(135deg, rgb(var(--rgb-primary)) 0%, rgb(var(--rgb-secondary)) 50%, rgb(var(--rgb-secondary)) 100%)',
+            boxShadow: mutation.isPending || !form.originalUrl.trim() ? 'none' : '0 4px 15px rgba(var(--rgb-primary),0.3)',
             cursor: mutation.isPending || !form.originalUrl.trim() ? 'not-allowed' : 'pointer',
           }}
         >

@@ -87,7 +87,7 @@ const BulkUploadPage = () => {
         {...getRootProps()}
         className={`
           border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300
-          ${isDragActive ? 'border-indigo-500 bg-indigo-50/40 shadow-[0_12px_40px_rgba(99,102,241,0.05)]' : 'border-slate-200 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.01)] hover:border-indigo-300 hover:bg-indigo-50/10'}
+          ${isDragActive ? 'border-indigo-500 bg-indigo-50/40 shadow-[0_12px_40px_rgba(var(--rgb-primary),0.05)]' : 'border-slate-200 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.01)] hover:border-indigo-300 hover:bg-indigo-50/10'}
           ${file ? 'border-emerald-400 bg-emerald-50/20' : ''}
         `}
       >

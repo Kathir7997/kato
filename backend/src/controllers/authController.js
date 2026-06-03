@@ -2,6 +2,7 @@
 // Handles user registration and login
 
 const asyncHandler = require('express-async-handler');
+const crypto = require('crypto');
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const { isValidEmail, isStrongPassword } = require('../utils/validators');
@@ -46,6 +47,7 @@ const register = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      settings: user.settings,
       createdAt: user.createdAt,
       token: generateToken(user._id),
     },
@@ -79,6 +81,7 @@ const login = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      settings: user.settings,
       createdAt: user.createdAt,
       token: generateToken(user._id),
     },
@@ -104,6 +107,7 @@ const getProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      settings: user.settings,
       createdAt: user.createdAt,
     },
   });
@@ -154,6 +158,23 @@ const updateProfile = asyncHandler(async (req, res) => {
     user.password = password;
   }
 
+  if (req.body.settings) {
+    if (typeof req.body.settings.spamProtection === 'boolean') {
+      user.settings.spamProtection = req.body.settings.spamProtection;
+    }
+    if (typeof req.body.settings.theme === 'string') {
+      user.settings.theme = req.body.settings.theme;
+    }
+    if (req.body.settings.notifications) {
+      if (typeof req.body.settings.notifications.weeklyReport === 'boolean') {
+        user.settings.notifications.weeklyReport = req.body.settings.notifications.weeklyReport;
+      }
+      if (typeof req.body.settings.notifications.expiryAlerts === 'boolean') {
+        user.settings.notifications.expiryAlerts = req.body.settings.notifications.expiryAlerts;
+      }
+    }
+  }
+
   const updatedUser = await user.save();
 
   res.status(200).json({
@@ -162,10 +183,57 @@ const updateProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      settings: updatedUser.settings,
       createdAt: updatedUser.createdAt,
       token: generateToken(updatedUser._id),
     },
   });
 });
 
-module.exports = { register, login, getProfile, updateProfile };
+/**
+ * @desc    Delete user account and all data
+ * @route   DELETE /api/user/account
+ * @access  Private
+ */
+const deleteAccount = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  const Url = require('../models/Url');
+  const Visit = require('../models/Visit');
+
+  const userUrls = await Url.find({ userId: user._id });
+  const urlIds = userUrls.map(u => u._id);
+
+  await Visit.deleteMany({ urlId: { $in: urlIds } });
+  await Url.deleteMany({ userId: user._id });
+
+  await user.deleteOne();
+
+  res.status(200).json({ success: true, message: 'Account deleted successfully' });
+});
+
+/**
+ * @desc    Generate new Developer API Key
+ * @route   POST /api/user/apikey
+ * @access  Private
+ */
+const generateApiKey = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  
+  const newKey = 'kato_sk_' + crypto.randomBytes(24).toString('hex');
+  user.apiKey = newKey;
+  await user.save();
+  
+  res.status(200).json({ success: true, apiKey: newKey });
+});
+
+module.exports = { register, login, getProfile, updateProfile, deleteAccount, generateApiKey };

@@ -1,7 +1,7 @@
 // src/context/AuthContext.jsx
 // Global authentication state management
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { authAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -18,6 +18,14 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user?.settings?.theme) {
+      document.documentElement.setAttribute('data-theme', user.settings.theme);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'indigo');
+    }
+  }, [user?.settings?.theme]);
 
   const login = useCallback(async (email, password) => {
     setLoading(true);
@@ -57,10 +65,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const updateProfile = useCallback(async (name, email, password) => {
+  const updateProfile = useCallback(async (name, email, password, settings) => {
     setLoading(true);
     try {
-      const { data } = await authAPI.updateProfile({ name, email, password });
+      const { data } = await authAPI.updateProfile({ name, email, password, settings });
       const userData = data.data;
       localStorage.setItem('kato_token', userData.token);
       localStorage.setItem('kato_user', JSON.stringify(userData));
@@ -83,8 +91,20 @@ export const AuthProvider = ({ children }) => {
     toast.success('Logged out successfully');
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    setLoading(true);
+    try {
+      await authAPI.deleteAccount();
+      return { success: true };
+    } catch (err) {
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile, deleteAccount, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

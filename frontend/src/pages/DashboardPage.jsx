@@ -48,7 +48,7 @@ const DashboardPage = () => {
         className="flex items-start justify-between"
       >
         <div>
-          <p className="text-xs font-semibold mb-0.5" style={{ color: '#4f46e5' }}>
+          <p className="text-xs font-semibold mb-0.5" style={{ color: 'rgb(var(--rgb-primary-600))' }}>
             {greeting}, {user?.name?.split(' ')[0]} 👋
           </p>
           <h1 className="text-3xl font-bold text-slate-800 leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -126,7 +126,7 @@ const DashboardPage = () => {
                 onClick={() => { setStatus(s); setPage(1); }}
                 className="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
                 style={status === s
-                  ? { background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: 'white', boxShadow: '0 4px 12px rgba(99,102,241,0.2)' }
+                  ? { background: 'linear-gradient(135deg, rgb(var(--rgb-primary-600)), rgb(var(--rgb-primary-600)))', color: 'white', boxShadow: '0 4px 12px rgba(var(--rgb-primary),0.2)' }
                   : { color: '#475569' }
                 }
                 onMouseEnter={e => { if (status !== s) e.currentTarget.style.color = '#0f172a'; }}
@@ -159,7 +159,7 @@ const DashboardPage = () => {
             onClick={() => setOrder((p) => (p === 'desc' ? 'asc' : 'desc'))}
             className="px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200"
             style={{ background: '#ffffff', border: '1px solid #e2e8f0', color: '#475569' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#4f46e5'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'rgb(var(--rgb-primary-600))'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
             onMouseLeave={e => { e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = '#e2e8f0'; }}
             title={`Order: ${order}`}
           >
@@ -187,7 +187,7 @@ const DashboardPage = () => {
               ← Prev
             </button>
             <span className="text-xs font-medium px-3 py-1.5 rounded-lg"
-              style={{ background: '#eef2ff', color: '#4f46e5', border: '1px solid rgba(99,102,241,0.15)' }}>
+              style={{ background: '#eef2ff', color: 'rgb(var(--rgb-primary-600))', border: '1px solid rgba(var(--rgb-primary),0.15)' }}>
               {pagination.page} / {pagination.pages}
             </span>
             <button

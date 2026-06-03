@@ -11,6 +11,15 @@ const User = require('../models/User');
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
+  const apiKey = req.headers['x-api-key'];
+  if (apiKey) {
+    const user = await User.findOne({ apiKey });
+    if (user) {
+      req.user = user;
+      return next();
+    }
+  }
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer ')

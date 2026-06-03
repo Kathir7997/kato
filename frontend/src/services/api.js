@@ -34,6 +34,8 @@ export const authAPI = {
   login: (data) => api.post('/api/auth/login', data),
   getProfile: () => api.get('/api/user/profile'),
   updateProfile: (data) => api.put('/api/user/profile', data),
+  deleteAccount: () => api.delete('/api/user/account'),
+  generateApiKey: () => api.post('/api/user/apikey'),
 };
 
 // ─── URL ──────────────────────────────────────────────────────────────────
@@ -47,6 +49,7 @@ export const urlAPI = {
     api.post('/api/url/bulk-upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
+  exportUrls: () => api.get('/api/url/export', { responseType: 'blob' }),
 };
 
 // ─── Analytics ────────────────────────────────────────────────────────────

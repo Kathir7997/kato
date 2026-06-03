@@ -68,8 +68,8 @@ const RegisterPage = () => {
         style={{ background: 'rgba(8, 4, 20, 0.55)' }}
       />
       {/* Animated colour orbs */}
-      <div className="orb absolute z-0" style={{ width: 520, height: 520, top: '-10%', left: '-8%', background: 'rgba(99,102,241,0.25)' }} />
-      <div className="orb absolute z-0" style={{ width: 400, height: 400, bottom: '-10%', right: '-6%', background: 'rgba(168,85,247,0.2)', animationDelay: '4s' }} />
+      <div className="orb absolute z-0" style={{ width: 520, height: 520, top: '-10%', left: '-8%', background: 'rgba(var(--rgb-primary),0.25)' }} />
+      <div className="orb absolute z-0" style={{ width: 400, height: 400, bottom: '-10%', right: '-6%', background: 'rgba(var(--rgb-secondary),0.2)', animationDelay: '4s' }} />
       <div className="orb absolute z-0" style={{ width: 300, height: 300, top: '40%', right: '20%', background: 'rgba(236,72,153,0.12)', animationDelay: '8s' }} />
 
       <motion.div
@@ -93,7 +93,7 @@ const RegisterPage = () => {
             borderRight: '1px solid rgba(255,255,255,0.1)',
           }}
         >
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(168,85,247,0.1) 60%, rgba(236,72,153,0.08) 100%)', zIndex: 0 }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(var(--rgb-primary),0.18) 0%, rgba(var(--rgb-secondary),0.1) 60%, rgba(236,72,153,0.08) 100%)', zIndex: 0 }} />
 
           <div className="relative z-10 flex flex-col items-center gap-6">
             <motion.div 
@@ -103,11 +103,11 @@ const RegisterPage = () => {
             >
               <div style={{
                 width: 112, height: 112, borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(99,102,241,0.5) 0%, rgba(168,85,247,0.5) 100%)',
+                background: 'linear-gradient(135deg, rgba(var(--rgb-primary),0.5) 0%, rgba(var(--rgb-secondary),0.5) 100%)',
                 backdropFilter: 'blur(12px)',
                 border: '1.5px solid rgba(255,255,255,0.25)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 40px rgba(139,92,246,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                boxShadow: '0 0 40px rgba(var(--rgb-secondary),0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
               }}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 52, height: 52 }}>
                   <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -117,7 +117,7 @@ const RegisterPage = () => {
             </motion.div>
 
             <div className="text-center">
-              <h2 className="text-4xl font-black text-white tracking-wider mb-2" style={{ fontFamily: 'Outfit, sans-serif', textShadow: '0 2px 20px rgba(168,85,247,0.5)' }}>
+              <h2 className="text-4xl font-black text-white tracking-wider mb-2" style={{ fontFamily: 'Outfit, sans-serif', textShadow: '0 2px 20px rgba(var(--rgb-secondary),0.5)' }}>
                 KatoShort
               </h2>
               <p className="text-purple-200 text-sm font-medium opacity-80 tracking-widest uppercase">Smart URL Shortener</p>
@@ -169,7 +169,7 @@ const RegisterPage = () => {
                   WebkitBackdropFilter: 'blur(8px)',
                   border: focused === 'username' ? '1.5px solid rgba(199, 150, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.12)',
                   color: '#fff',
-                  boxShadow: focused === 'username' ? '0 0 0 3px rgba(139, 92, 246, 0.25)' : 'none',
+                  boxShadow: focused === 'username' ? '0 0 0 3px rgba(var(--rgb-secondary), 0.25)' : 'none',
                 }}
                 placeholder="Username"
                 value={form.name}
@@ -192,7 +192,7 @@ const RegisterPage = () => {
                   WebkitBackdropFilter: 'blur(8px)',
                   border: focused === 'email' ? '1.5px solid rgba(199, 150, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.12)',
                   color: '#fff',
-                  boxShadow: focused === 'email' ? '0 0 0 3px rgba(139, 92, 246, 0.25)' : 'none',
+                  boxShadow: focused === 'email' ? '0 0 0 3px rgba(var(--rgb-secondary), 0.25)' : 'none',
                 }}
                 placeholder="Email address"
                 value={form.email}
@@ -215,7 +215,7 @@ const RegisterPage = () => {
                   WebkitBackdropFilter: 'blur(8px)',
                   border: focused === 'password' ? '1.5px solid rgba(199, 150, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.12)',
                   color: '#fff',
-                  boxShadow: focused === 'password' ? '0 0 0 3px rgba(139, 92, 246, 0.25)' : 'none',
+                  boxShadow: focused === 'password' ? '0 0 0 3px rgba(var(--rgb-secondary), 0.25)' : 'none',
                 }}
                 placeholder="Password"
                 value={form.password}
@@ -254,7 +254,7 @@ const RegisterPage = () => {
                   WebkitBackdropFilter: 'blur(8px)',
                   border: focused === 'confirm' ? '1.5px solid rgba(199, 150, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.12)',
                   color: '#fff',
-                  boxShadow: focused === 'confirm' ? '0 0 0 3px rgba(139, 92, 246, 0.25)' : 'none',
+                  boxShadow: focused === 'confirm' ? '0 0 0 3px rgba(var(--rgb-secondary), 0.25)' : 'none',
                 }}
                 placeholder="Confirm password"
                 value={form.confirm}
@@ -295,7 +295,7 @@ const RegisterPage = () => {
               whileTap={{ scale: loading ? 1 : 0.98 }}
               className="w-full py-4 rounded-xl font-bold text-lg text-white transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
               style={{
-                background: loading ? 'rgba(99,102,241,0.4)' : 'linear-gradient(90deg, #6366f1 0%, #ec4899 100%)',
+                background: loading ? 'rgba(var(--rgb-primary),0.4)' : 'linear-gradient(90deg, rgb(var(--rgb-primary)) 0%, rgb(var(--rgb-accent-1)) 100%)',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 marginBottom: '24px',
               }}

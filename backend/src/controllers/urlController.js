@@ -8,6 +8,7 @@ const Visit = require('../models/Visit');
 const { generateShortCode } = require('../services/shortCodeService');
 const { generateQRCode } = require('../services/qrService');
 const { isValidUrl, isValidAlias } = require('../utils/validators');
+const { checkIfHarmful } = require('../services/scannerService');
 
 /**
  * @desc    Create a new short URL
@@ -25,6 +26,13 @@ const createUrl = asyncHandler(async (req, res) => {
   if (!isValidUrl(originalUrl)) {
     res.status(400);
     throw new Error('Please provide a valid URL (must start with http:// or https://)');
+  }
+
+  // Check for spam/malware if protection is enabled
+  const isSpamProtectionEnabled = req.user.settings?.spamProtection !== false;
+  if (isSpamProtectionEnabled && checkIfHarmful(originalUrl)) {
+    res.status(403);
+    throw new Error('This URL has been flagged as malicious or spam and cannot be shortened.');
   }
 
   // Validate alias if provided
@@ -151,6 +159,11 @@ const updateUrl = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Please provide a valid URL');
     }
+    const isSpamProtectionEnabled = req.user.settings?.spamProtection !== false;
+    if (isSpamProtectionEnabled && checkIfHarmful(originalUrl)) {
+      res.status(403);
+      throw new Error('This URL has been flagged as malicious or spam and cannot be updated.');
+    }
     url.originalUrl = originalUrl;
   }
 
@@ -238,6 +251,12 @@ const bulkUpload = asyncHandler(async (req, res) => {
       continue;
     }
 
+    const isSpamProtectionEnabled = req.user.settings?.spamProtection !== false;
+    if (isSpamProtectionEnabled && checkIfHarmful(OriginalURL)) {
+      results.push({ originalUrl: OriginalURL, success: false, error: 'Flagged as malicious or spam' });
+      continue;
+    }
+
     let shortCode;
     if (CustomAlias) {
       if (!isValidAlias(CustomAlias)) {
@@ -282,4 +301,33 @@ const bulkUpload = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { createUrl, getUrls, getUrlById, updateUrl, deleteUrl, bulkUpload };
+/**
+ * @desc    Export URLs as CSV
+ * @route   GET /api/url/export
+ * @access  Private
+ */
+const exportUrls = asyncHandler(async (req, res) => {
+  const urls = await Url.find({ userId: req.user._id }).sort({ createdAt: -1 });
+  
+  if (!urls || urls.length === 0) {
+    res.status(404);
+    throw new Error('No URLs found to export');
+  }
+
+  const baseUrl = process.env.BASE_URL;
+  
+  let csvContent = 'Original URL,Short URL,Created At,Clicks,Status\\n';
+  
+  urls.forEach(u => {
+    const shortUrl = `${baseUrl}/${u.shortCode}`;
+    const createdAt = new Date(u.createdAt).toISOString().split('T')[0];
+    const status = u.isExpired ? 'Expired' : 'Active';
+    csvContent += `"${u.originalUrl}","${shortUrl}","${createdAt}",${u.clicks},"${status}"\\n`;
+  });
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=urls-export.csv');
+  res.status(200).send(csvContent);
+});
+
+module.exports = { createUrl, getUrls, getUrlById, updateUrl, deleteUrl, bulkUpload, exportUrls };

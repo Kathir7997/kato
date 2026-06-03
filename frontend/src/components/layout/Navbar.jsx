@@ -5,14 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import { urlAPI } from '../../services/api';
-import ProfileSettingsModal from '../shared/ProfileSettingsModal';
 
 const Navbar = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showProfileSettings, setShowProfileSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
@@ -52,11 +50,15 @@ const Navbar = ({ onToggleSidebar }) => {
     const results = [];
 
     if ('settings'.includes(query) || 'profile'.includes(query)) {
-      results.push({ id: 'settings', type: 'action', title: 'Profile Settings', icon: 'settings', onClick: () => setShowProfileSettings(true) });
+      results.push({ id: 'settings', type: 'action', title: 'Profile Settings', icon: 'settings', onClick: () => navigate('/settings') });
     }
 
-    if ('analytics'.includes(query) || 'dashboard'.includes(query)) {
-      results.push({ id: 'dashboard', type: 'link', title: 'Analytics Dashboard', icon: 'chart', path: '/dashboard' });
+    if ('dashboard'.includes(query)) {
+      results.push({ id: 'dashboard', type: 'link', title: 'Dashboard', icon: 'chart', path: '/dashboard' });
+    }
+
+    if ('analytics'.includes(query)) {
+      results.push({ id: 'analytics', type: 'link', title: 'Analytics', icon: 'chart', path: '/analytics' });
     }
 
     if (urlsData) {
@@ -122,7 +124,7 @@ const Navbar = ({ onToggleSidebar }) => {
         >
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+              style={{ background: 'linear-gradient(135deg, rgb(var(--rgb-primary)), rgb(var(--rgb-secondary)))' }}>
               <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
               </svg>
@@ -350,8 +352,8 @@ const Navbar = ({ onToggleSidebar }) => {
             <motion.div
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
               style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
-                boxShadow: '0 4px 12px rgba(99,102,241,0.2)',
+                background: 'linear-gradient(135deg, rgb(var(--rgb-primary)) 0%, rgb(var(--rgb-secondary)) 50%, rgb(var(--rgb-accent-1)) 100%)',
+                boxShadow: '0 4px 12px rgba(var(--rgb-primary),0.2)',
               }}
               whileHover={{ scale: 1.1 }}
             >
@@ -393,8 +395,8 @@ const Navbar = ({ onToggleSidebar }) => {
           >
             <motion.button
               onClick={() => {
-                setShowProfileSettings(true);
                 setShowUserMenu(false);
+                navigate('/settings');
               }}
               className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
               style={{ color: '#475569' }}
@@ -420,10 +422,6 @@ const Navbar = ({ onToggleSidebar }) => {
           </motion.div>
         </div>
       </div>
-      <ProfileSettingsModal
-        isOpen={showProfileSettings}
-        onClose={() => setShowProfileSettings(false)}
-      />
     </header>
   );
 };

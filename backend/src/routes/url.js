@@ -10,6 +10,7 @@ const {
   updateUrl,
   deleteUrl,
   bulkUpload,
+  exportUrls,
 } = require('../controllers/urlController');
 
 // Use memory storage for CSV files
@@ -29,6 +30,7 @@ router.use(protect); // all URL routes require auth
 
 router.post('/create', createUrl);
 router.post('/bulk-upload', upload.single('file'), bulkUpload);
+router.get('/export', exportUrls);
 router.get('/', getUrls);
 router.get('/:id', getUrlById);
 router.put('/:id', updateUrl);

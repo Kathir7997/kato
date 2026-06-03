@@ -110,7 +110,7 @@ const UrlTable = ({ urls = [], loading = false }) => {
                           rel="noopener noreferrer"
                           className="truncate block transition-colors text-xs"
                           style={{ color: '#475569', maxWidth: '200px' }}
-                          onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+                          onMouseEnter={e => e.currentTarget.style.color = 'rgb(var(--rgb-primary-600))'}
                           onMouseLeave={e => e.currentTarget.style.color = '#475569'}
                           title={url.originalUrl}
                         >
@@ -126,9 +126,9 @@ const UrlTable = ({ urls = [], loading = false }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-semibold text-sm transition-colors"
-                            style={{ color: '#4f46e5' }}
-                            onMouseEnter={e => e.currentTarget.style.color = '#6366f1'}
-                            onMouseLeave={e => e.currentTarget.style.color = '#4f46e5'}
+                            style={{ color: 'rgb(var(--rgb-primary-600))' }}
+                            onMouseEnter={e => e.currentTarget.style.color = 'rgb(var(--rgb-primary))'}
+                            onMouseLeave={e => e.currentTarget.style.color = 'rgb(var(--rgb-primary-600))'}
                           >
                             /{url.shortCode}
                           </a>
@@ -136,7 +136,7 @@ const UrlTable = ({ urls = [], loading = false }) => {
                             onClick={() => handleCopy(shortUrl)}
                             className="p-1 rounded transition-all duration-150"
                             style={{ color: '#64748b' }}
-                            onMouseEnter={e => { e.currentTarget.style.color = '#4f46e5'; }}
+                            onMouseEnter={e => { e.currentTarget.style.color = 'rgb(var(--rgb-primary-600))'; }}
                             onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; }}
                             title="Copy"
                           >
@@ -190,7 +190,7 @@ const UrlTable = ({ urls = [], loading = false }) => {
                       <td className="px-4 py-3.5">
                         <div className="flex items-center justify-end gap-0.5">
                           <ActionBtn onClick={() => handleCopy(shortUrl)} title="Copy URL"
-                            colorHover={{ color: '#4f46e5', bg: '#f0f2ff' }}>
+                            colorHover={{ color: 'rgb(var(--rgb-primary-600))', bg: '#f0f2ff' }}>
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                 d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -198,7 +198,7 @@ const UrlTable = ({ urls = [], loading = false }) => {
                           </ActionBtn>
 
                           <ActionBtn onClick={() => setQrUrl(url)} title="View QR Code"
-                            colorHover={{ color: '#7c3aed', bg: '#f5f3ff' }}>
+                            colorHover={{ color: 'rgb(var(--rgb-primary-600))', bg: '#f5f3ff' }}>
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                 d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
