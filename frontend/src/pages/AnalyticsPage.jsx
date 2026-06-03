@@ -285,8 +285,12 @@ const AnalyticsPage = () => {
                     <motion.tr key={v._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                       transition={{ delay: i * 0.03 }} className="table-row-hover hover:bg-slate-50/50 transition-colors"
                     >
-                      <td className="px-6 py-4 text-slate-700 font-medium">{v.date}</td>
-                      <td className="px-6 py-4 text-slate-400 text-xs">{v.time}</td>
+                      <td className="px-6 py-4 text-slate-700 font-medium">
+                        {v.timestamp ? new Date(v.timestamp).toLocaleDateString() : v.date}
+                      </td>
+                      <td className="px-6 py-4 text-slate-400 text-xs">
+                        {v.timestamp ? new Date(v.timestamp).toLocaleTimeString() : v.time}
+                      </td>
                       <td className="px-6 py-4 text-slate-800 font-semibold">{v.browser}</td>
                       <td className="px-6 py-4">
                         <span className={`text-xs font-bold px-3 py-1 rounded-full ${

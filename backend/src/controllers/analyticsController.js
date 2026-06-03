@@ -84,6 +84,7 @@ const getAnalytics = asyncHandler(async (req, res) => {
     _id: v._id,
     date: new Date(v.timestamp).toLocaleDateString(),
     time: new Date(v.timestamp).toLocaleTimeString(),
+    timestamp: v.timestamp,
     browser: v.browser,
     device: v.device,
     os: v.os,

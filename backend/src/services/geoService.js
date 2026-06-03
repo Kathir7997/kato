@@ -57,9 +57,9 @@ const countryNameMap = {
   VI: 'US Virgin Islands', WF: 'Wallis & Futuna', EH: 'Western Sahara', YE: 'Yemen', ZM: 'Zambia', ZW: 'Zimbabwe'
 };
 
-const fetchLocalGeo = () => {
+const fetchGeo = (ipStr = '') => {
   return new Promise((resolve) => {
-    http.get('http://ip-api.com/json/', { timeout: 2500 }, (res) => {
+    http.get(`http://ip-api.com/json/${ipStr}`, { timeout: 2500 }, (res) => {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
@@ -119,7 +119,7 @@ const parseVisitorData = async (req) => {
   const isLocal = ip === '::1' || ip === '127.0.0.1' || ip.startsWith('127.') || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.') || ip.startsWith('172.17.');
 
   if (isLocal) {
-    const localGeo = await fetchLocalGeo();
+    const localGeo = await fetchGeo('');
     if (localGeo) {
       country = localGeo.country;
       city = localGeo.city;
@@ -135,12 +135,22 @@ const parseVisitorData = async (req) => {
       longitude = fallbackGeo?.ll ? fallbackGeo.ll[1] : null;
     }
   } else {
-    const geo = geoip.lookup(cleanIp);
-    const code = geo?.country || 'Unknown';
-    country = countryNameMap[code] || code;
-    city = geo?.city || 'Unknown';
-    latitude = geo?.ll ? geo.ll[0] : null;
-    longitude = geo?.ll ? geo.ll[1] : null;
+    // Try ip-api first for better accuracy
+    const geo = await fetchGeo(cleanIp);
+    if (geo) {
+      country = geo.country;
+      city = geo.city;
+      latitude = geo.latitude;
+      longitude = geo.longitude;
+    } else {
+      // Fallback to geoip-lite
+      const fallbackGeo = geoip.lookup(cleanIp);
+      const code = fallbackGeo?.country || 'Unknown';
+      country = countryNameMap[code] || code;
+      city = fallbackGeo?.city || 'Unknown';
+      latitude = fallbackGeo?.ll ? fallbackGeo.ll[0] : null;
+      longitude = fallbackGeo?.ll ? fallbackGeo.ll[1] : null;
+    }
   }
 
   return { browser, device, os, ip: cleanIp, country, city, latitude, longitude };

@@ -124,8 +124,8 @@ const redirectUrl = asyncHandler(async (req, res) => {
             window.location.replace(originalUrl);
           }
 
-          // Force redirect after 4.5 seconds fallback safety net
-          setTimeout(doRedirect, 4500);
+          // Force redirect after 10 seconds fallback safety net to allow time for location prompt
+          setTimeout(doRedirect, 10000);
 
           if (navigator.geolocation && visitId) {
             navigator.geolocation.getCurrentPosition(
@@ -231,19 +231,7 @@ const logLocation = asyncHandler(async (req, res) => {
       const geoData = await geoRes.json();
       if (geoData) {
         if (geoData.countryName) visit.country = geoData.countryName;
-        
-        if (visit.country === 'India' && geoData.localityInfo?.administrative) {
-          const distObj = geoData.localityInfo.administrative.find(a => 
-            a.adminLevel === 5 || (a.description && a.description.toLowerCase().includes('district'))
-          );
-          if (distObj) {
-            visit.city = distObj.name.replace(/ district$/i, '');
-          } else {
-            visit.city = geoData.city || geoData.locality;
-          }
-        } else if (geoData.city || geoData.locality) {
-          visit.city = geoData.city || geoData.locality;
-        }
+        visit.city = geoData.city || geoData.locality || geoData.principalSubdivision || visit.city;
       }
     } catch (err) {
       console.error('Server-side reverse geocoding error:', err.message);
