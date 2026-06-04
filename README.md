@@ -308,19 +308,13 @@ VITE_BASE_URL=http://localhost:5000
 
 ---
 
-## 📸 Screenshots
 
-> _Screenshots coming after deployment_
-
-| Dashboard | Analytics | Public Stats |
-|---|---|---|
-| ![Dashboard](./screenshots/dashboard.png) | ![Analytics](./screenshots/analytics.png) | ![Stats](./screenshots/stats.png) |
 
 ---
 
 ## 🎬 Demo Video
 
-> _Loom/YouTube walkthrough link coming soon_
+https://youtu.be/xKHlE1y_JCE?si=fTMHvwcqJkZXCIVi
 
 ---
 
@@ -434,5 +428,6 @@ katoshort/
 ---
 
 This project is a part of a hackathon run by https://katomaran.com
-#   k a t o  
+#   k a t o 
+ 
  
